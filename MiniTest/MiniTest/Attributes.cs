@@ -23,7 +23,7 @@ public class PriorityAttribute : Attribute
 public class DataRowAttribute : Attribute
 {
     public object?[] Parameters { get; } 
-    public string Description { get; }
+    public string Description { get; set; }
 
     public DataRowAttribute(string description, params object?[] parameters)
     {
@@ -37,7 +37,7 @@ public class DataRowAttribute : Attribute
 [AttributeUsage(AttributeTargets.All)]
 public class DescriptionAttribute : Attribute
 {
-    public string Description { get; }
+    public string Description { get; set; }
     public DescriptionAttribute(string description) => Description = description;
 }
 
