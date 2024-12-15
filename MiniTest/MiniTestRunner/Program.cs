@@ -1,4 +1,7 @@
-﻿namespace MiniTestRunner;
+﻿
+using System.Reflection;
+
+namespace MiniTestRunner;
 
 class Program
 {
@@ -10,7 +13,16 @@ class Program
             return;
         }
 
-        var assemblies = args.Select(s => AssemblyLoader.LoadAssembly(s)).ToList();
-        
+        var testRunner = new TestRunner();
+
+        foreach (var arg in args)
+        {
+            var loadContext = new TestAssemblyLoadContext(arg);
+
+            var assembly = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(arg)));
+            testRunner.RunTestsFromAssembly(assembly); 
+            
+            loadContext.Unload();
+        }
     }
 }

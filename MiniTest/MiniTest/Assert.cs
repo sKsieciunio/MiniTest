@@ -47,7 +47,7 @@ public static class Assert
         catch (Exception e) when (!(e is TException))
         {
             throw new AssertionException(
-                $"Expected exception type: <{typeof(TException)}>. Acutal exception type: <{e.GetType()}>. {message}");
+                $"Expected exception type: <{typeof(TException)}>. Actual exception type: <{e.GetType()}>. {message}");
         }
     }
 }
