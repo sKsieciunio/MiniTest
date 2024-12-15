@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AuthenticationService\AuthenticationService.csproj" />
+      <ProjectReference Include="..\MiniTest\MiniTest.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService", "AuthenticationService\AuthenticationService.csproj", "{89956A38-CBD6-4DA4-803A-C565C6EB53BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService.Tests", "AuthenticationService.Tests\AuthenticationService.Tests.csproj", "{1E3B0414-F1F8-4A65-BBE4-CF6515D3D2F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniTest", "MiniTest\MiniTest.csproj", "{1375A978-5739-4C0D-BA8F-ACCA3B8BD349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniTestRunner", "MiniTestRunner\MiniTestRunner.csproj", "{D987B6A1-7DCB-490A-ABC4-4C1A9303CF52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,5 +23,13 @@ Global
 		{1E3B0414-F1F8-4A65-BBE4-CF6515D3D2F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E3B0414-F1F8-4A65-BBE4-CF6515D3D2F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E3B0414-F1F8-4A65-BBE4-CF6515D3D2F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1375A978-5739-4C0D-BA8F-ACCA3B8BD349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1375A978-5739-4C0D-BA8F-ACCA3B8BD349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1375A978-5739-4C0D-BA8F-ACCA3B8BD349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1375A978-5739-4C0D-BA8F-ACCA3B8BD349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D987B6A1-7DCB-490A-ABC4-4C1A9303CF52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D987B6A1-7DCB-490A-ABC4-4C1A9303CF52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D987B6A1-7DCB-490A-ABC4-4C1A9303CF52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D987B6A1-7DCB-490A-ABC4-4C1A9303CF52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
