@@ -1,4 +1,6 @@
-﻿namespace MiniTest;
+﻿using System.Reflection;
+
+namespace MiniTest;
 
 public class AssertionException : Exception
 {
@@ -49,5 +51,6 @@ public static class Assert
             throw new AssertionException(
                 $"Expected exception type: <{typeof(TException)}>. Actual exception type: <{e.GetType()}>. {message}");
         }
+        catch (Exception e) when (e is TException) { }
     }
 }

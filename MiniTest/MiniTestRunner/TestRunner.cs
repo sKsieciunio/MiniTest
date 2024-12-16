@@ -8,14 +8,20 @@ public class TestRunner
     public void RunTestsFromAssembly(Assembly assembly)
     {
         Utils.ConsoleWriteColorLine($"Running tests in assembly: {assembly.FullName}\n", ConsoleColor.Blue);
+
+        var results = new TestResult(assembly.FullName);
         
         foreach (var testClass in TestDiscovery.GetTestClasses(assembly))
-            RunTestClass(testClass);
+            results += RunTestClass(testClass);
+
+        results.Log(2);
     }
 
-    private void RunTestClass(Type testClass)
+    private TestResult RunTestClass(Type testClass)
     {
         Utils.ConsoleWriteColorLine($"Running tests in class: {testClass.Name}\n", ConsoleColor.Cyan, 2);
+
+        var results = new TestResult(testClass.Name);
 
         object? instance;
         try
@@ -24,12 +30,17 @@ public class TestRunner
         }
         catch (MissingMethodException)
         {
-            Utils.ConsoleWriteColorLine($"No parameterless constructor!\n", ConsoleColor.Yellow, 2); 
-            return;
+            Utils.ConsoleWriteColorLine($"No parameterless constructor!\n", ConsoleColor.Yellow, 4);
+            results.Log(4);
+            return results;
         }
 
         if (instance == null)
-            return;
+        {
+            Utils.ConsoleWriteColorLine($"Failed to instanciate class!\n", ConsoleColor.Yellow, 4);
+            results.Log(4);
+            return results;
+        }
 
         var beforeEachMethodInfo = TestDiscovery.GetBeforeEachMethod(testClass);
         var afterEachMethodInfo = TestDiscovery.GetAfterEachMethod(testClass);
@@ -45,20 +56,27 @@ public class TestRunner
         var testMethods = TestDiscovery.GetTestMethods(testClass)
             .OrderBy(m => m.Item1.GetCustomAttributes<PriorityAttribute>().FirstOrDefault()?.Priority ?? 0)
             .ThenBy(m => m.Item1.Name);
-        
+
         foreach (var (method, parameters) in testMethods)
+        {
+            if (parameters.Length == 0)
+                results.Add(RunTest(instance, method, beforeEach, afterEach));
+
             foreach (var parameter in parameters)
-                RunTest(instance, method, beforeEach, afterEach, parameter);
+                results.Add(RunTest(instance, method, beforeEach, afterEach, parameter));
+        }
 
         Console.WriteLine("");
+        results.Log(4);
+        Console.WriteLine("");
         
-
-        // foreach (var (method, dataRows) in TestDiscovery.GetParameterizedTests(testClass))
-        //     RunTest();
+        return results;
     }
 
-    private void RunTest(object instance, MethodInfo method, Action? beforeEach, Action? afterEach, params object?[] parameters)
+    private bool RunTest(object instance, MethodInfo method, Action? beforeEach, Action? afterEach, params object?[] parameters)
     {
+        bool result;
+        
         try
         {
             beforeEach?.Invoke();
@@ -66,6 +84,8 @@ public class TestRunner
             
             Utils.ConsoleWriteColor("[PASSED] ", ConsoleColor.Green, 4);
             Console.WriteLine($"{method.Name}");
+
+            result = true;
         }
         catch (Exception e)
         {
@@ -79,10 +99,14 @@ public class TestRunner
             
             if (description != null)
                 Utils.ConsoleWriteColorLine($"{description}", indent: 6);
+
+            result = false;
         }
         finally
         {
             afterEach?.Invoke();
         }
+
+        return result;
     }
 }
