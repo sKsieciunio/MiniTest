@@ -11,12 +11,6 @@ public class TestDiscovery
             .GetTypes().Where(t => t.GetCustomAttributes<TestClassAttribute>().Count() > 0);
     }
 
-    public static IEnumerable<MethodInfo> GetTestMethods(Type testClass)
-    {
-        return testClass
-            .GetMethods().Where(m => m.GetCustomAttributes<TestMethodAttribute>().Count() > 0);
-    }
-
     public static MethodInfo? GetBeforeEachMethod(Type testClass)
     {
         return testClass.GetMethods()
@@ -29,11 +23,11 @@ public class TestDiscovery
             .FirstOrDefault(m => m.GetCustomAttributes<AfterEachAttribute>().Count() > 0);
     }
 
-    public static IEnumerable<(MethodInfo, DataRowAttribute[] DataRows)> GetParameterizedTests(Type testClass)
+    public static IEnumerable<(MethodInfo, DataRowAttribute[] DataRows)> GetTestMethods(Type testClass)
     {
-        return GetTestMethods(testClass)
-            .Select(m => (m, m.GetCustomAttributes<DataRowAttribute>().ToArray()))
-            .Where(t => t.Item2.Length > 0);
+        return testClass
+            .GetMethods()
+            .Where(m => m.GetCustomAttributes<TestMethodAttribute>().Count() > 0)
+            .Select(m => (m, m.GetCustomAttributes<DataRowAttribute>().ToArray()));
     }
-        
 }
