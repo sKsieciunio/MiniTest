@@ -7,19 +7,19 @@ public class TestRunner
 {
     public void RunTestsFromAssembly(Assembly assembly)
     {
-        Utils.ConsoleWriteColorLine($"Running tests in assembly: {assembly.FullName}\n", ConsoleColor.Blue);
+        Logger.LogAssembly(assembly.FullName ?? "");
 
         var results = new TestResult(assembly.FullName ?? "null");
         
         foreach (var testClass in TestDiscovery.GetTestClasses(assembly))
             results += RunTestClass(testClass);
 
-        results.Log(2);
+        Logger.LogAssemblyResult(results);
     }
 
     private TestResult RunTestClass(Type testClass)
     {
-        Utils.ConsoleWriteColorLine($"Running tests in class: {testClass.Name}\n", ConsoleColor.Cyan, 2);
+        Logger.LogTestClass(testClass.Name);
 
         var results = new TestResult(testClass.Name);
 
@@ -30,15 +30,15 @@ public class TestRunner
         }
         catch (MissingMethodException)
         {
-            Utils.ConsoleWriteColorLine($"No parameterless constructor!\n", ConsoleColor.Yellow, 4);
-            results.Log(4);
+            Logger.LogWarning("No parameterless constructor!");
+            Logger.LogResult(results);
             return results;
         }
 
         if (instance == null)
         {
-            Utils.ConsoleWriteColorLine($"Failed to instanciate class!\n", ConsoleColor.Yellow, 4);
-            results.Log(4);
+            Logger.LogWarning("Failed to instanciate class!");
+            Logger.LogResult(results);
             return results;
         }
 
@@ -66,14 +66,12 @@ public class TestRunner
                 results.Add(RunTest(instance, method, beforeEach, afterEach, parameter.Parameters));
         }
 
-        Console.WriteLine("");
-        results.Log(4);
-        Console.WriteLine("");
+        Logger.LogResult(results);
         
         return results;
     }
 
-    private bool RunTest(object instance, MethodInfo method, Action? beforeEach, Action? afterEach, params object?[] parameters)
+    private bool RunTest(object instance, MethodInfo method, Action? beforeEach, Action? afterEach, params object[] parameters)
     {
         bool result;
         
@@ -83,7 +81,7 @@ public class TestRunner
             method.Invoke(instance, parameters);
             
             Utils.ConsoleWriteColor("[PASSED] ", ConsoleColor.Green, 4);
-            Console.WriteLine($"{method.Name}");
+            Console.WriteLine(parameters.Length == 0 ? $"{method.Name}" : $"{method.Name} -> [Description Here]");
 
             result = true;
         }

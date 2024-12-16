@@ -25,11 +25,11 @@ public class TestResult
         _numberOfTests++;
     }
 
-    public void Log(int indent = 0)
+    public void Log()
     {
-        Utils.ConsoleWriteColorLine($"Test summary for: {_name}", ConsoleColor.White, indent);
-        Utils.ConsoleWriteColorLine($"* Test passed:  {TestsPassed} / {NumberOfTests}", ConsoleColor.White, indent);    
-        Utils.ConsoleWriteColorLine($"* Failed:       {TestsFailed}", ConsoleColor.White, indent);    
+        Console.WriteLine($"Test summary for: {_name}");
+        Console.WriteLine($"* Test passed:  {TestsPassed} / {NumberOfTests}");    
+        Console.WriteLine($"* Failed:       {TestsFailed}");    
     }
 
     public override string ToString()
