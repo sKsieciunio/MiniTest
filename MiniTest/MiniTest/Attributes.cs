@@ -22,16 +22,13 @@ public class PriorityAttribute : Attribute
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class DataRowAttribute : Attribute
 {
-    public object?[] Parameters { get; } 
-    public string Description { get; set; }
+    public object[] Parameters { get; } 
+    public string? Description { get; set; }
 
-    public DataRowAttribute(string description, params object?[] parameters)
+    public DataRowAttribute(params object[] parameters)
     {
         Parameters = parameters;
-        Description = description;
     }
-
-    public DataRowAttribute(params object?[] parameters) : this(string.Empty, parameters) { }
 }
 
 [AttributeUsage(AttributeTargets.All)]

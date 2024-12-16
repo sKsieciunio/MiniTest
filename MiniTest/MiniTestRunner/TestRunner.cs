@@ -9,7 +9,7 @@ public class TestRunner
     {
         Utils.ConsoleWriteColorLine($"Running tests in assembly: {assembly.FullName}\n", ConsoleColor.Blue);
 
-        var results = new TestResult(assembly.FullName);
+        var results = new TestResult(assembly.FullName ?? "null");
         
         foreach (var testClass in TestDiscovery.GetTestClasses(assembly))
             results += RunTestClass(testClass);
@@ -63,7 +63,7 @@ public class TestRunner
                 results.Add(RunTest(instance, method, beforeEach, afterEach));
 
             foreach (var parameter in parameters)
-                results.Add(RunTest(instance, method, beforeEach, afterEach, parameter));
+                results.Add(RunTest(instance, method, beforeEach, afterEach, parameter.Parameters));
         }
 
         Console.WriteLine("");
