@@ -79,24 +79,28 @@ public class TestRunner
         {
             beforeEach?.Invoke();
             method.Invoke(instance, parameters);
-            
-            Utils.ConsoleWriteColor("[PASSED] ", ConsoleColor.Green, 4);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("[PASSED] ");
+            Console.ResetColor();
             Console.WriteLine(parameters.Length == 0 ? $"{method.Name}" : $"{method.Name} -> [Description Here]");
 
             result = true;
         }
         catch (Exception e)
         {
-            Utils.ConsoleWriteColor("[FAILED] ", ConsoleColor.Red, 4);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("[FAILED] ");
+            Console.ResetColor();
             Console.WriteLine($"{method.Name}");
-            
+
             if (e.InnerException?.Message != null)
-                Utils.ConsoleWriteColorLine($"{e.InnerException?.Message}", indent: 6);
+                Console.WriteLine($"{e.InnerException?.Message}");
 
             var description = method.GetCustomAttributes<DescriptionAttribute>().FirstOrDefault()?.Description;
             
             if (description != null)
-                Utils.ConsoleWriteColorLine($"{description}", indent: 6);
+                Console.WriteLine($"{description}");
 
             result = false;
         }
