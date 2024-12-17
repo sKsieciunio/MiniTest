@@ -60,10 +60,19 @@ public class TestRunner
         foreach (var (method, parameters) in testMethods)
         {
             if (parameters.Length == 0)
-                results.Add(RunTest(instance, method, beforeEach, afterEach));
-
-            foreach (var parameter in parameters)
-                results.Add(RunTest(instance, method, beforeEach, afterEach, parameter.Parameters));
+                results.Add(RunTest(instance, method, beforeEach, afterEach, []));
+            else
+            {
+                Console.WriteLine($"[ TEST ] {method.Name}");
+                
+                foreach (var parameter in parameters)
+                    results.Add(RunTest(instance, method, beforeEach, afterEach, parameter.Parameters, parameter.Description));
+            }
+            
+            var description = method.GetCustomAttributes<DescriptionAttribute>().FirstOrDefault()?.Description;
+            
+            if (description != null)
+                Console.WriteLine($"{description}");
         }
 
         Logger.LogResult(results);
@@ -71,9 +80,11 @@ public class TestRunner
         return results;
     }
 
-    private bool RunTest(object instance, MethodInfo method, Action? beforeEach, Action? afterEach, params object[] parameters)
+    private bool RunTest(object instance, MethodInfo method, Action? beforeEach, Action? afterEach, object[] parameters, string parameterDescription = "")
     {
         bool result;
+        string indent = parameters.Length == 0 ? "" : "-> ";
+        Console.Write(indent);
         
         try
         {
@@ -81,26 +92,21 @@ public class TestRunner
             method.Invoke(instance, parameters);
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("[PASSED] ");
+            Console.Write($"[PASSED] ");
             Console.ResetColor();
-            Console.WriteLine(parameters.Length == 0 ? $"{method.Name}" : $"{method.Name} -> [Description Here]");
+            Console.WriteLine(parameters.Length == 0 ? $"{method.Name}" : $"{parameterDescription}");
 
             result = true;
         }
         catch (Exception e)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("[FAILED] ");
+            Console.Write($"[FAILED] ");
             Console.ResetColor();
             Console.WriteLine($"{method.Name}");
 
             if (e.InnerException?.Message != null)
                 Console.WriteLine($"{e.InnerException?.Message}");
-
-            var description = method.GetCustomAttributes<DescriptionAttribute>().FirstOrDefault()?.Description;
-            
-            if (description != null)
-                Console.WriteLine($"{description}");
 
             result = false;
         }

@@ -23,11 +23,12 @@ public class PriorityAttribute : Attribute
 public class DataRowAttribute : Attribute
 {
     public object[] Parameters { get; } 
-    public string? Description { get; set; }
+    public string Description { get; set; }
 
     public DataRowAttribute(params object[] parameters)
     {
         Parameters = parameters;
+        Description = "";
     }
 }
 
