@@ -26,14 +26,31 @@ public static class Logger
      public static void LogAssemblyResult(TestResult result)
      {
           Console.WriteLine(new string('-', Console.WindowWidth));
-          LogResult(result);
+          LogResults(result);
           Console.WriteLine(new string('-', Console.WindowWidth));
      }
 
-     public static void LogResult(TestResult result)
+     public static void LogResults(TestResult results)
      {
           Console.ForegroundColor = ConsoleColor.White;
-          result.Log();
+          results.Log();
           Console.ResetColor();
+     }
+
+     public static void LogTest(bool result, string message)
+     {
+          if (result)
+          {
+               Console.ForegroundColor = ConsoleColor.Green;
+               Console.Write($"[PASSED] ");
+          }
+          else
+          {
+               Console.ForegroundColor = ConsoleColor.Red;
+               Console.Write($"[FAILED] ");
+          }
+
+          Console.ResetColor();
+          Console.WriteLine(message);
      }
 }

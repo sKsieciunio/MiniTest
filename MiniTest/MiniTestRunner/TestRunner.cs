@@ -31,14 +31,14 @@ public class TestRunner
         catch (MissingMethodException)
         {
             Logger.LogWarning("No parameterless constructor!");
-            Logger.LogResult(results);
+            Logger.LogResults(results);
             return results;
         }
 
         if (instance == null)
         {
             Logger.LogWarning("Failed to instanciate class!");
-            Logger.LogResult(results);
+            Logger.LogResults(results);
             return results;
         }
 
@@ -75,14 +75,14 @@ public class TestRunner
                 Console.WriteLine($"{description}");
         }
 
-        Logger.LogResult(results);
+        Logger.LogResults(results);
         
         return results;
     }
 
     private bool RunTest(object instance, MethodInfo method, Action? beforeEach, Action? afterEach, object[] parameters, string parameterDescription = "")
     {
-        bool result;
+        bool result = false;
         string indent = parameters.Length == 0 ? "" : "-> ";
         Console.Write(indent);
         
@@ -90,28 +90,20 @@ public class TestRunner
         {
             beforeEach?.Invoke();
             method.Invoke(instance, parameters);
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"[PASSED] ");
-            Console.ResetColor();
-            Console.WriteLine(parameters.Length == 0 ? $"{method.Name}" : $"{parameterDescription}");
-
+            
             result = true;
         }
         catch (Exception e)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"[FAILED] ");
-            Console.ResetColor();
-            Console.WriteLine($"{method.Name}");
-
+            result = false;
+            
             if (e.InnerException?.Message != null)
                 Console.WriteLine($"{e.InnerException?.Message}");
-
-            result = false;
         }
         finally
         {
+            Logger.LogTest(result, parameters.Length == 0 ? $"{method.Name}" : $"{parameterDescription}");
+            
             afterEach?.Invoke();
         }
 
