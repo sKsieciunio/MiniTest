@@ -1,4 +1,4 @@
-# Minitest
+# Mini Test
 
 MiniTest is a lightweight unit testing framework developed in C# using .net8.0. Created for C# advanced programming course.
 
